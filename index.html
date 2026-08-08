@@ -236,33 +236,39 @@
       <button type="submit">Join the waitlist</button>
     </form>
     <p class="error" id="form-error" role="alert"></p>
-    <p class="hint" id="form-hint">We'll open your email app to confirm — no account, no spam, one email when we launch.</p>
+    <p class="hint" id="form-hint">No account, no spam — one email when we launch.</p>
 
     <div class="success" id="success-msg" role="status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      <span>You're on the list — send that email and we'll be in touch when Kelbrin launches.</span>
+      <span>You're on the list — we'll email you the moment Kelbrin launches.</span>
     </div>
 
     <footer>Kelbrin &middot; United Kingdom</footer>
 
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-  // v1 waitlist capture: no backend yet, so this opens a pre-filled email
-  // to hello@kelbrin.co.uk via mailto. Once Supabase is set up, replace
-  // this handler with a real insert into a "waitlist" table and keep the
-  // same success-state UI below.
+  // Paste your own values from Supabase → Project Settings → API.
+  // Use the "anon public" key ONLY. Never put the service_role key here —
+  // that key bypasses all security rules and must stay server-side only.
+  const SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE';
+  const SUPABASE_ANON_KEY = 'PASTE_YOUR_ANON_PUBLIC_KEY_HERE';
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   const form = document.getElementById('waitlist-form');
   const emailInput = document.getElementById('email');
   const errorEl = document.getElementById('form-error');
   const hintEl = document.getElementById('form-hint');
   const successEl = document.getElementById('success-msg');
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   function isValidEmail(value){
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
-  form.addEventListener('submit', function(e){
+  form.addEventListener('submit', async function(e){
     e.preventDefault();
     const value = emailInput.value.trim();
 
@@ -273,10 +279,19 @@
     }
 
     errorEl.textContent = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Joining\u2026';
 
-    const subject = encodeURIComponent('Kelbrin waitlist');
-    const body = encodeURIComponent('Please add me to the Kelbrin waitlist: ' + value);
-    window.location.href = 'mailto:hello@kelbrin.co.uk?subject=' + subject + '&body=' + body;
+    const { error } = await supabaseClient.from('waitlist').insert({ email: value });
+
+    // Postgres code 23505 = unique constraint violation, i.e. they already
+    // signed up. Treat that as success too — no need to make it feel broken.
+    if (error && error.code !== '23505') {
+      errorEl.textContent = 'Something went wrong on our end \u2014 mind trying again in a moment?';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Join the waitlist';
+      return;
+    }
 
     form.classList.add('hidden');
     hintEl.style.display = 'none';
