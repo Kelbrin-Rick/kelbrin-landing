@@ -249,12 +249,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-  // Paste your own values from Supabase → Project Settings → API.
-  // Use the "anon public" key ONLY. Never put the service_role key here —
-  // that key bypasses all security rules and must stay server-side only.
   const SUPABASE_URL = 'https://epkdkgxuuqbdmknyrjed.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwa2RrZ3h1dXFiZG1rbnlyamVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMTM5NjksImV4cCI6MjEwMTc4OTk2OX0.0quJWwoiIfHOWdwNbNhTJzUm2fQye-grnURqkZ4YNYU';const SUPABASE_URL = 'https://epkdkgxuuqbdmknyrjed.supabase.co';
-
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwa2RrZ3h1dXFiZG1rbnlyamVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMTM5NjksImV4cCI6MjEwMTc4OTk2OX0.0quJWwoiIfHOWdwNbNhTJzUm2fQye-grnURqkZ4YNYU';
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -285,10 +281,8 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
     const { error } = await supabaseClient.from('waitlist').insert({ email: value });
 
-    // Postgres code 23505 = unique constraint violation, i.e. they already
-    // signed up. Treat that as success too — no need to make it feel broken.
     if (error && error.code !== '23505') {
-      errorEl.textContent = 'Something went wrong on our end \u2014 mind trying again in a moment?';
+      errorEl.textContent = 'Something went wrong on our end — mind trying again in a moment?';
       submitBtn.disabled = false;
       submitBtn.textContent = 'Join the waitlist';
       return;
@@ -299,6 +293,3 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
     successEl.classList.add('show');
   });
 </script>
-
-</body>
-</html>
