@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelbrin — the true cheapest way to shop your list</title>
+<meta name="description" content="Kelbrin compares prices across UK supermarkets — including the cost of getting there — so you always know the real cheapest way to buy your list. Launching soon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal-950: #1c1b19;
+    --charcoal-900: #211f1d;
+    --charcoal-800: #2b2a28;
+    --charcoal-700: #3a3835;
+    --paper: #f2ede4;
+    --paper-dim: #cfc7ba;
+    --muted: #8f887c;
+    --wine: #a8214f;
+    --wine-bright: #c22a5d;
+    --wine-dim: #6b1836;
+    --focus: #e7c9a9;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    min-height: 100svh;
+    background:
+      radial-gradient(1100px 600px at 82% -10%, rgba(168,33,79,0.16), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(168,33,79,0.10), transparent 55%),
+      var(--charcoal-900);
+    color: var(--paper);
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8vh 6vw 6vh;
+    overflow-x: hidden;
+  }
+
+  .frame{
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* --- Mark --- */
+  .mark{
+    width: 56px;
+    height: 56px;
+    margin-bottom: 2.4rem;
+  }
+  .mark svg{ width: 100%; height: 100%; display: block; }
+  .mark .facet{
+    transform-origin: 200px 200px;
+    animation: assemble 1100ms cubic-bezier(.16,.9,.28,1) both;
+  }
+  .mark .facet:nth-child(1){ animation-delay: 40ms;  transform: translate(-26px,-8px); }
+  .mark .facet:nth-child(2){ animation-delay: 160ms; transform: translate(-18px, 20px); }
+  .mark .facet:nth-child(3){ animation-delay: 260ms; transform: translate(14px, -22px); }
+  .mark .facet:nth-child(4){ animation-delay: 340ms; transform: translate(22px, -14px); }
+  .mark .facet.accent{     animation-delay: 460ms; transform: translate(20px, 18px); }
+
+  @keyframes assemble{
+    0%   { opacity: 0; }
+    100% { opacity: 1; transform: translate(0,0); }
+  }
+
+  /* --- Eyebrow --- */
+  .eyebrow{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wine-bright);
+    margin: 0 0 1.1rem;
+  }
+
+  /* --- Headline --- */
+  h1{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5.6vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.3rem;
+    max-width: 13ch;
+  }
+  h1 em{
+    font-style: normal;
+    color: var(--wine-bright);
+  }
+
+  .sub{
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--paper-dim);
+    max-width: 46ch;
+    margin: 0 0 2.6rem;
+  }
+
+  /* --- Form --- */
+  form{
+    width: 100%;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .field{
+    flex: 1 1 260px;
+    position: relative;
+  }
+
+  input[type="email"]{
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(242,237,228,0.18);
+    border-radius: 10px;
+    padding: 0.95rem 1.05rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    color: var(--paper);
+    outline: none;
+    transition: border-color 160ms ease, background 160ms ease;
+  }
+  input[type="email"]::placeholder{ color: var(--muted); }
+  input[type="email"]:focus-visible{
+    border-color: var(--focus);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 3px rgba(231,201,169,0.18);
+  }
+
+  button{
+    flex: 0 0 auto;
+    background: linear-gradient(135deg, var(--wine-bright), var(--wine));
+    color: var(--paper);
+    border: none;
+    border-radius: 10px;
+    padding: 0.95rem 1.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+  }
+  button:hover{ filter: brightness(1.08); }
+  button:active{ transform: translateY(1px); }
+  button:focus-visible{
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(231,201,169,0.35);
+  }
+
+  .hint{
+    margin: 0.85rem 0 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .error{
+    color: var(--wine-bright);
+    font-size: 0.82rem;
+    margin: 0.6rem 0 0;
+    min-height: 1.1em;
+  }
+
+  /* --- Success state --- */
+  .success{
+    display: none;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(168,33,79,0.4);
+    background: rgba(168,33,79,0.1);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: var(--paper);
+  }
+  .success.show{ display: flex; }
+  .success svg{ flex: 0 0 auto; width: 20px; height: 20px; color: var(--wine-bright); }
+
+  form.hidden{ display: none; }
+
+  footer{
+    margin-top: 3.4rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .mark .facet{ animation: none; opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 480px){
+    body{ padding: 10vh 6vw 6vh; }
+    form{ flex-direction: column; }
+    button{ width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="frame">
+
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 400 400">
+        <polygon class="facet" points="95,65 160,90 160,220 95,255" fill="#2b2a28"/>
+        <polygon class="facet" points="95,268 160,233 160,335 95,355" fill="#2b2a28"/>
+        <polygon class="facet" points="150,225 178,175 300,68 258,68 160,190" fill="#2b2a28"/>
+        <polygon class="facet" points="178,175 200,140 340,68 300,68" fill="#2b2a28"/>
+        <polygon class="facet accent" points="150,238 178,200 345,355 283,355" fill="#a8214f"/>
+      </svg>
+    </div>
+
+    <p class="eyebrow">Launching across the UK</p>
+
+    <h1>Every supermarket.<br>One list.<br><em>The true cheapest way to shop it.</em></h1>
+
+    <p class="sub">Kelbrin compares prices across UK supermarkets — including what it actually costs to get there — so you always know the real cheapest way to buy what's on your list.</p>
+
+    <form id="waitlist-form" novalidate>
+      <div class="field">
+        <input type="email" id="email" name="email" placeholder="you@example.com" required aria-label="Email address" autocomplete="email">
+      </div>
+      <button type="submit">Join the waitlist</button>
+    </form>
+    <p class="error" id="form-error" role="alert"></p>
+    <p class="hint" id="form-hint">We'll open your email app to confirm — no account, no spam, one email when we launch.</p>
+
+    <div class="success" id="success-msg" role="status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>You're on the list — send that email and we'll be in touch when Kelbrin launches.</span>
+    </div>
+
+    <footer>Kelbrin &middot; United Kingdom</footer>
+
+  </div>
+
+<script>
+  // v1 waitlist capture: no backend yet, so this opens a pre-filled email
+  // to hello@kelbrin.co.uk via mailto. Once Supabase is set up, replace
+  // this handler with a real insert into a "waitlist" table and keep the
+  // same success-state UI below.
+  const form = document.getElementById('waitlist-form');
+  const emailInput = document.getElementById('email');
+  const errorEl = document.getElementById('form-error');
+  const hintEl = document.getElementById('form-hint');
+  const successEl = document.getElementById('success-msg');
+
+  function isValidEmail(value){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const value = emailInput.value.trim();
+
+    if(!isValidEmail(value)){
+      errorEl.textContent = 'That email address doesn\u2019t look quite right — mind checking it?';
+      emailInput.focus();
+      return;
+    }
+
+    errorEl.textContent = '';
+
+    const subject = encodeURIComponent('Kelbrin waitlist');
+    const body = encodeURIComponent('Please add me to the Kelbrin waitlist: ' + value);
+    window.location.href = 'mailto:hello@kelbrin.co.uk?subject=' + subject + '&body=' + body;
+
+    form.classList.add('hidden');
+    hintEl.style.display = 'none';
+    successEl.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
