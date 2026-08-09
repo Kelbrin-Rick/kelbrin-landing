@@ -171,6 +171,138 @@
     min-height: 1.1em;
   }
 
+
+  /* --- Postcode + beta checkbox --- */
+  .field-secondary{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-top: 0.7rem;
+  }
+  input[type="text"]#postcode{
+    width: 100%;
+    max-width: 280px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(242,237,228,0.18);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    color: var(--paper);
+    outline: none;
+    text-transform: uppercase;
+  }
+  input[type="text"]#postcode::placeholder{ color: var(--muted); text-transform: none; }
+  input[type="text"]#postcode:focus-visible{
+    border-color: var(--focus);
+    box-shadow: 0 0 0 3px rgba(231,201,169,0.18);
+  }
+
+  .checkbox-row{
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--paper-dim);
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .checkbox-row input[type="checkbox"]{
+    margin-top: 0.2rem;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--wine-bright);
+    flex: 0 0 auto;
+    cursor: pointer;
+  }
+
+  /* --- Research panel --- */
+  .research{
+    display: none;
+    width: 100%;
+    margin-top: 1.6rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgba(242,237,228,0.12);
+  }
+  .research.show{ display: block; }
+  .research-intro{
+    font-size: 0.95rem;
+    color: var(--paper);
+    margin: 0 0 1.3rem;
+    font-weight: 500;
+  }
+  .research-q{ margin-bottom: 1.3rem; }
+  .research-q label.q-label{
+    display: block;
+    font-size: 0.85rem;
+    color: var(--paper-dim);
+    margin-bottom: 0.55rem;
+  }
+  .research-options{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .research-options label{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--paper-dim);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(242,237,228,0.14);
+    border-radius: 8px;
+    padding: 0.45rem 0.7rem;
+    cursor: pointer;
+  }
+  .research-options input{ accent-color: var(--wine-bright); cursor: pointer; }
+  .research-q select{
+    width: 100%;
+    max-width: 320px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(242,237,228,0.18);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--paper);
+  }
+  .research-q textarea{
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(242,237,228,0.18);
+    border-radius: 10px;
+    padding: 0.8rem 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--paper);
+    resize: vertical;
+    min-height: 70px;
+  }
+  .research-actions{
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+  .research-skip{
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0.5rem 0;
+  }
+  .research-done{
+    display: none;
+    color: var(--paper);
+    font-size: 0.9rem;
+  }
+  .research-done.show{ display: block; }
+
   /* --- Success state --- */
   .success{
     display: none;
@@ -277,13 +409,87 @@
         <input type="email" id="email" name="email" placeholder="you@example.com" required aria-label="Email address" autocomplete="email">
       </div>
       <button type="submit">Join the waitlist</button>
+      <div class="field-secondary">
+        <input type="text" id="postcode" name="postcode" placeholder="Postcode area, e.g. E14 (optional)" maxlength="4" aria-label="Postcode area">
+        <label class="checkbox-row">
+          <input type="checkbox" id="beta-opt-in" name="beta-opt-in">
+          <span>I'm interested in testing Kelbrin before launch</span>
+        </label>
+      </div>
     </form>
     <p class="error" id="form-error" role="alert"></p>
-    <p class="hint" id="form-hint">No account, no spam — one email when we launch.</p>
+    <p class="hint" id="form-hint">Join the Kelbrin early-access list — no spam. We'll only contact you about early access, beta testing and launch.</p>
 
     <div class="success" id="success-msg" role="status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      <span>You're on the list — we'll email you the moment Kelbrin launches.</span>
+      <span>You're on the Kelbrin early-access list.</span>
+    </div>
+
+    <div class="research" id="research-panel">
+      <p class="research-intro">Help shape Kelbrin — it takes about 30 seconds (totally optional).</p>
+
+      <div class="research-q">
+        <label class="q-label">Where do you usually shop?</label>
+        <div class="research-options" id="q-retailers">
+          <label><input type="checkbox" value="Tesco">Tesco</label>
+          <label><input type="checkbox" value="Sainsbury's">Sainsbury's</label>
+          <label><input type="checkbox" value="Asda">Asda</label>
+          <label><input type="checkbox" value="Morrisons">Morrisons</label>
+          <label><input type="checkbox" value="Aldi">Aldi</label>
+          <label><input type="checkbox" value="Lidl">Lidl</label>
+          <label><input type="checkbox" value="Waitrose">Waitrose</label>
+          <label><input type="checkbox" value="Iceland">Iceland</label>
+          <label><input type="checkbox" value="Co-op">Co-op</label>
+          <label><input type="checkbox" value="Ocado">Ocado</label>
+          <label><input type="checkbox" value="M&S">M&amp;S</label>
+          <label><input type="checkbox" value="Other">Other</label>
+        </div>
+      </div>
+
+      <div class="research-q">
+        <label class="q-label" for="q-feature">What would you most want Kelbrin to do?</label>
+        <select id="q-feature">
+          <option value="">Prefer not to say</option>
+          <option value="cheapest_item">Find the cheapest place for individual products</option>
+          <option value="cheapest_list">Find the cheapest supermarket for my entire shopping list</option>
+          <option value="split_basket">Split my basket between stores if it saves enough money</option>
+          <option value="fuel_aware">Include fuel/travel costs when comparing supermarkets</option>
+          <option value="price_alerts">Tell me when products I buy become cheaper</option>
+          <option value="other">Something else</option>
+        </select>
+      </div>
+
+      <div class="research-q">
+        <label class="q-label" for="q-frequency">How often do you grocery shop?</label>
+        <select id="q-frequency">
+          <option value="">Prefer not to say</option>
+          <option value="more_than_weekly">More than once a week</option>
+          <option value="weekly">Weekly</option>
+          <option value="fortnightly">Every two weeks</option>
+          <option value="less_often">Less often</option>
+        </select>
+      </div>
+
+      <div class="research-q">
+        <label class="q-label" for="q-beta">Would you test Kelbrin before public launch?</label>
+        <select id="q-beta">
+          <option value="">Prefer not to say</option>
+          <option value="yes">Yes</option>
+          <option value="maybe">Maybe</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="research-q">
+        <label class="q-label" for="q-frustration">What's the most frustrating thing about grocery shopping or comparing prices today?</label>
+        <textarea id="q-frustration" maxlength="500" placeholder="Optional — in your own words"></textarea>
+      </div>
+
+      <div class="research-actions">
+        <button type="button" id="research-submit">Send feedback</button>
+        <button type="button" class="research-skip" id="research-skip">Skip this</button>
+      </div>
+      <p class="research-done" id="research-done">Thanks — that's genuinely useful.</p>
     </div>
 
     <footer>Kelbrin &middot; United Kingdom</footer>
@@ -291,6 +497,13 @@
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  // ---- PostHog ----
+  // Paste your own values from PostHog -> Project Settings -> Project API Key,
+  // and the correct host for your region (see chat instructions).
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PASTE_YOUR_POSTHOG_PROJECT_API_KEY', {api_host: 'PASTE_YOUR_POSTHOG_HOST'});
+</script>
 <script>
   // Paste your own values from Supabase → Project Settings → API.
   // Use the "anon public" key ONLY. Never put the service_role key here —
@@ -300,20 +513,57 @@
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  // ---- UTM / attribution capture ----
+  const params = new URLSearchParams(window.location.search);
+  const utm = {
+    utm_source: params.get('utm_source'),
+    utm_medium: params.get('utm_medium'),
+    utm_campaign: params.get('utm_campaign'),
+    utm_content: params.get('utm_content'),
+    utm_term: params.get('utm_term'),
+    referrer: document.referrer || null,
+    landing_page: window.location.pathname
+  };
+
   const form = document.getElementById('waitlist-form');
   const emailInput = document.getElementById('email');
+  const postcodeInput = document.getElementById('postcode');
+  const betaCheckbox = document.getElementById('beta-opt-in');
   const errorEl = document.getElementById('form-error');
   const hintEl = document.getElementById('form-hint');
   const successEl = document.getElementById('success-msg');
+  const researchPanel = document.getElementById('research-panel');
   const submitBtn = form.querySelector('button[type="submit"]');
+
+  let currentRowId = null;
+  let startedFired = false;
+  let researchStartedFired = false;
 
   function isValidEmail(value){
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
+  // waitlist_form_viewed — form is above the fold, so fire on load
+  if (window.posthog) posthog.capture('waitlist_form_viewed', { source: utm.utm_source, campaign: utm.utm_campaign });
+
+  emailInput.addEventListener('focus', function(){
+    if (!startedFired) {
+      startedFired = true;
+      if (window.posthog) posthog.capture('waitlist_started', { source: utm.utm_source, campaign: utm.utm_campaign });
+    }
+  });
+
+  betaCheckbox.addEventListener('change', function(){
+    if (betaCheckbox.checked && window.posthog) {
+      posthog.capture('beta_opt_in', { source: utm.utm_source, campaign: utm.utm_campaign });
+    }
+  });
+
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     const value = emailInput.value.trim();
+    const postcodeValue = postcodeInput.value.trim().toUpperCase();
+    const betaValue = betaCheckbox.checked;
 
     if(!isValidEmail(value)){
       errorEl.textContent = 'That email address doesn\u2019t look quite right — mind checking it?';
@@ -325,7 +575,24 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Joining\u2026';
 
-    const { error } = await supabaseClient.from('waitlist').insert({ email: value });
+    // Generate the id client-side so we can update this same row later
+    // (for optional research answers) without needing a SELECT permission.
+    const newId = crypto.randomUUID();
+
+    const { error } = await supabaseClient.from('waitlist').insert({
+      id: newId,
+      email: value,
+      postcode_area: postcodeValue || null,
+      beta_opt_in: betaValue,
+      research_completed: false,
+      utm_source: utm.utm_source,
+      utm_medium: utm.utm_medium,
+      utm_campaign: utm.utm_campaign,
+      utm_content: utm.utm_content,
+      utm_term: utm.utm_term,
+      referrer: utm.referrer,
+      landing_page: utm.landing_page
+    });
 
     // Postgres code 23505 = unique constraint violation, i.e. they already
     // signed up. Treat that as success too — no need to make it feel broken.
@@ -336,11 +603,86 @@
       return;
     }
 
+    if (!error) currentRowId = newId; // only set if this was a genuinely new row
+
+    if (window.posthog) {
+      posthog.capture('waitlist_submitted', {
+        postcode_present: !!postcodeValue,
+        beta_opt_in: betaValue,
+        source: utm.utm_source,
+        medium: utm.utm_medium,
+        campaign: utm.utm_campaign
+      });
+    }
+
     form.classList.add('hidden');
     hintEl.style.display = 'none';
     successEl.classList.add('show');
+
+    if (currentRowId) {
+      researchPanel.classList.add('show');
+      if (!researchStartedFired) {
+        researchStartedFired = true;
+        if (window.posthog) posthog.capture('research_started', { source: utm.utm_source, campaign: utm.utm_campaign });
+      }
+    }
+  });
+
+  // ---- Research panel ----
+  const researchSubmitBtn = document.getElementById('research-submit');
+  const researchSkipBtn = document.getElementById('research-skip');
+  const researchDone = document.getElementById('research-done');
+
+  function hideResearchForm(){
+    document.querySelectorAll('.research-q, .research-actions').forEach(el => el.style.display = 'none');
+    researchDone.classList.add('show');
+  }
+
+  researchSkipBtn.addEventListener('click', function(){
+    hideResearchForm();
+  });
+
+  researchSubmitBtn.addEventListener('click', async function(){
+    if (!currentRowId) { hideResearchForm(); return; }
+
+    const retailers = Array.from(document.querySelectorAll('#q-retailers input:checked')).map(i => i.value);
+    const featureInterest = document.getElementById('q-feature').value || null;
+    const shoppingFrequency = document.getElementById('q-frequency').value || null;
+    const betaAnswer = document.getElementById('q-beta').value;
+    const frustrationText = document.getElementById('q-frustration').value.trim() || null;
+
+    researchSubmitBtn.disabled = true;
+    researchSubmitBtn.textContent = 'Sending\u2026';
+
+    const updatePayload = {
+      research_completed: true,
+      retailer_preferences: retailers.length ? retailers : null,
+      feature_interest: featureInterest,
+      shopping_frequency: shoppingFrequency,
+      shopping_problem_text: frustrationText
+    };
+    // A "yes" or "maybe" here refines the earlier quick checkbox into a
+    // stronger signal; "no" is left as-is rather than overriding an earlier yes.
+    if (betaAnswer === 'yes' || betaAnswer === 'maybe') updatePayload.beta_opt_in = true;
+
+    const { error } = await supabaseClient.from('waitlist').update(updatePayload).eq('id', currentRowId);
+
+    if (!error && window.posthog) {
+      posthog.capture('research_completed', {
+        feature_interest: featureInterest,
+        shopping_frequency: shoppingFrequency,
+        beta_interest: betaAnswer || null,
+        retailer_count: retailers.length
+      });
+    }
+
+    hideResearchForm();
   });
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
