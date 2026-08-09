@@ -343,7 +343,8 @@
 
   <div class="frame">
 
-    <div class="mark" aria-hidden="true">
+    <a href="/" aria-label="Kelbrin home" style="display:inline-block; text-decoration:none;">
+<div class="mark" aria-hidden="true">
 <svg class="mark-svg" width="48" height="48"
    width="1000"
    height="1000.0001"
@@ -397,6 +398,7 @@
        id="path11"
        transform="matrix(0.26458321,0,0,0.26458321,144.78548,-58.057543)" /></g></svg>
 </div>
+    </a>
 
     <p class="eyebrow">Launching across the UK</p>
 
@@ -535,7 +537,7 @@
   const researchPanel = document.getElementById('research-panel');
   const submitBtn = form.querySelector('button[type="submit"]');
 
-  let currentRowId = null;
+  let currentEmail = null;
   let startedFired = false;
   let researchStartedFired = false;
 
@@ -575,12 +577,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Joining\u2026';
 
-    // Generate the id client-side so we can update this same row later
-    // (for optional research answers) without needing a SELECT permission.
-    const newId = crypto.randomUUID();
-
     const { error } = await supabaseClient.from('waitlist').insert({
-      id: newId,
       email: value,
       postcode_area: postcodeValue || null,
       beta_opt_in: betaValue,
@@ -603,7 +600,10 @@
       return;
     }
 
-    if (!error) currentRowId = newId; // only set if this was a genuinely new row
+    // Track by email rather than the freshly-generated id, so the research
+    // panel works correctly both for a brand-new signup and for someone
+    // (or a tester) resubmitting an email that's already on the list.
+    currentEmail = value;
 
     if (window.posthog) {
       posthog.capture('waitlist_submitted', {
@@ -619,12 +619,10 @@
     hintEl.style.display = 'none';
     successEl.classList.add('show');
 
-    if (currentRowId) {
-      researchPanel.classList.add('show');
-      if (!researchStartedFired) {
-        researchStartedFired = true;
-        if (window.posthog) posthog.capture('research_started', { source: utm.utm_source, campaign: utm.utm_campaign });
-      }
+    researchPanel.classList.add('show');
+    if (!researchStartedFired) {
+      researchStartedFired = true;
+      if (window.posthog) posthog.capture('research_started', { source: utm.utm_source, campaign: utm.utm_campaign });
     }
   });
 
@@ -643,7 +641,7 @@
   });
 
   researchSubmitBtn.addEventListener('click', async function(){
-    if (!currentRowId) { hideResearchForm(); return; }
+    if (!currentEmail) { hideResearchForm(); return; }
 
     const retailers = Array.from(document.querySelectorAll('#q-retailers input:checked')).map(i => i.value);
     const featureInterest = document.getElementById('q-feature').value || null;
@@ -665,7 +663,7 @@
     // stronger signal; "no" is left as-is rather than overriding an earlier yes.
     if (betaAnswer === 'yes' || betaAnswer === 'maybe') updatePayload.beta_opt_in = true;
 
-    const { error } = await supabaseClient.from('waitlist').update(updatePayload).eq('id', currentRowId);
+    const { error } = await supabaseClient.from('waitlist').update(updatePayload).eq('email', currentEmail);
 
     if (!error && window.posthog) {
       posthog.capture('research_completed', {
