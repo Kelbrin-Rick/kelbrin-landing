@@ -665,7 +665,14 @@
     // stronger signal; "no" is left as-is rather than overriding an earlier yes.
     if (betaAnswer === 'yes' || betaAnswer === 'maybe') updatePayload.beta_opt_in = true;
 
-    const { error } = await supabaseClient.from('waitlist').update(updatePayload).eq('id', currentRowId);
+    const { error } = await supabaseClient.rpc('submit_research', {
+  p_id: currentRowId,
+  p_beta_opt_in: updatePayload.beta_opt_in ?? null,
+  p_retailer_preferences: updatePayload.retailer_preferences ?? null,
+  p_feature_interest: updatePayload.feature_interest ?? null,
+  p_shopping_frequency: updatePayload.shopping_frequency ?? null,
+  p_shopping_problem_text: updatePayload.shopping_problem_text ?? null
+});
 
     if (!error && window.posthog) {
       posthog.capture('research_completed', {
